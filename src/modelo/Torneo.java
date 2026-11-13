@@ -1,5 +1,10 @@
 package modelo;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -122,5 +127,22 @@ public class Torneo implements Serializable {
 
         // Llamada recursiva con los siguientes dos equipos
         emparejar(lista, indice + 2, partidos);
+    }
+
+    // SERIALIZACION: guarda el torneo completo en un archivo binario
+    public void guardar(String rutaArchivo) throws IOException {
+        try (ObjectOutputStream salida = new ObjectOutputStream(
+                new FileOutputStream(rutaArchivo))) {
+            salida.writeObject(this);
+        }
+    }
+
+    // DESERIALIZACION: carga un torneo desde un archivo binario
+    public static Torneo cargar(String rutaArchivo)
+            throws IOException, ClassNotFoundException {
+        try (ObjectInputStream entrada = new ObjectInputStream(
+                new FileInputStream(rutaArchivo))) {
+            return (Torneo) entrada.readObject();
+        }
     }
 }
